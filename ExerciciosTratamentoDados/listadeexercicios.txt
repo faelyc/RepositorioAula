@@ -1,0 +1,115 @@
+from google.colab import drive
+
+drive.mount('/content/gdrive')
+
+import pandas as pd
+
+Data = pd.read_excel(r'/content/contentgdrive/MyDrive/dados_ausentes.xlsx')
+
+display(pd.DataFrame(Data))
+
+
+#1. Exercício: Carregar um arquivo e exibir as primeiras 5 linhas.
+Data = pd.read_excel(r'/content/contentgdrive/MyDrive/dados_ausentes.xlsx')
+Data.head(6)
+
+
+#2. Exercício: Verificar se há valores NaN nas colunas do DataFrame.
+nan_coluna = Data.isna().any()
+
+print(nan_coluna)
+
+
+#3. Exercício: Substituir os valores NaN de uma coluna por 0.
+nan_coluna = Data['Idade'].fillna(0)
+
+print(nan_coluna)
+
+
+#4. Exercício: Substituir os valores NaN de uma coluna por um valor específico
+#(por exemplo, a média).
+import pandas as pd
+
+Data = pd.DataFrame(Data)
+mean_data = Data["Idade"].mean()
+print(mean_data)
+nan_coluna = Data['Idade'].fillna(mean_data)
+
+print(nan_coluna)
+
+
+#5. Exercício: Remover todas as linhas que contêm valores NaN em qualquer
+#coluna
+Data = Data.dropna()
+
+print(Data)
+
+
+#6. Exercício: Remover todas as linhas que contêm valores NaN em uma
+#coluna específica.
+Data = pd.read_excel(r'/content/contentgdrive/MyDrive/dados_ausentes.xlsx')
+Data = Data.dropna(subset=['Idade'])
+print(Data)
+
+
+#7. Exercício: Substituir valores NaN de uma coluna com a mediana dessa
+#coluna.
+Data['Idade'] = Data['Idade'].median()
+print(Data)
+
+
+#8. Exercício: Substituir valores NaN de uma coluna com o valor de uma outra
+#coluna.
+
+Data['Idade'] = Data['Cidade'].fillna(Data['Idade'])
+print(Data)
+
+
+Data['Idade'] = Data['Idade'].fillna(Data['Cidade'])
+
+
+#9. Exercício: Preencher valores NaN com o valor anterior (método de forward
+#fill).
+Data = pd.read_excel(r'/content/contentgdrive/MyDrive/dados_ausentes.xlsx')
+Data = pd.DataFrame(Data)
+Data.fillna(method='ffill', inplace=True)
+print(Data)
+
+
+#10. Exercício: Preencher valores NaN com o valor posterior (método de
+#backward fill).
+data_bfilled = Data.bfill()
+
+print(data_bfilled)
+
+
+#11. Exercício: Alterar todos os valores de uma coluna para maiúsculas.
+Data['Cidade'] = Data['Cidade'].str.title()
+print(Data)
+
+
+#12. Exercício: Alterar todos os valores de uma coluna para minúsculas.
+Data['Cidade'] = Data['Cidade'].str.lower()
+print(Data)
+
+
+#13. Exercício: Remover espaços em branco à esquerda e à direita em uma
+#coluna.
+Data['Cidade'] = Data['Cidade'].str.strip()
+print(Data)
+
+
+#14. Exercício: Substituir valores de uma coluna com base em um dicionário de
+#mapeamento (ex: ;São Paulo; para SP).
+Data = pd.read_excel(r'/content/contentgdrive/MyDrive/dados_ausentes.xlsx')
+mapeamento = {'São Paulo': 'SP', 'Rio de Janeiro': 'RJ', 'Salvador': 'BA', 'Porto Alegre': 'RS'}
+Data['Cidade'] = Data['Cidade'].map(mapeamento)
+print(Data)
+
+
+#15 - Exercício: Identificar e remover valores duplicados de um DataFrame.
+Data.duplicated().sum()
+valores_duplicados = Data.duplicated()
+print(valores_duplicados)
+Data = Data.drop_duplicates()
+data_sem_duplicatas = Data.drop_duplicates(subset=['Nome'])
