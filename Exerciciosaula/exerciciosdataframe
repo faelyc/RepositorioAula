@@ -1,0 +1,176 @@
+from google.colab import drive
+
+
+drive.mount('/content/fdrive')
+
+
+import pandas as pd
+
+
+Data = pd.read_excel(r'/content/fdrive/MyDrive/vendas.xlsx')
+
+
+display(pd.DataFrame(Data))
+
+
+#1.Padronizar a coluna &#39;categoria&#39; para minúsculas.
+Data['categoria'] = Data['categoria'].str.lower()
+print(Data)
+
+
+#2.Remover registros onde a quantidade está ausente
+data_ausente = Data.dropna(subset=['quantidade'])
+
+print(data_ausente)
+
+
+#3. Remover espaços extras e padronizar com primeira letra maiúscula (estilo título)
+
+Data.columns = [col.title() for col in Data.columns]
+print(Data.columns)
+
+
+#4. Garantir que a coluna data seja datetime
+Data['Data'] = pd.to_datetime(Data['Data'])
+
+
+#5. Calcular valor unitário real das vendas válidas
+import pandas as pd
+Data = pd.DataFrame(Data)
+
+Data['valor_unitario'] = Data['valor_venda'] / Data['quantidade']
+print(Data)
+
+
+#6. Calcular valor médio unitário por produto (sem considerar nulos)
+import pandas as pd
+Data = pd.read_excel(r'/content/fdrive/MyDrive/vendas.xlsx')
+Data = pd.DataFrame(Data)
+media_valor = Data['quantidade'].mean()
+Data['valor_venda'].fillna(media_valor, inplace=True)
+print(media_valor)
+
+
+#7. Agrupar e calcular média
+import pandas as pd
+
+Data = pd.read_excel(r'/content/fdrive/MyDrive/vendas.xlsx')
+data = Data.groupby('valor_venda')['valor_venda'].count()
+display(data)
+Data = pd.DataFrame(Data)
+media_idade = Data['valor_venda'].mean()
+
+print("Media:", media_idade)
+
+
+#8.Preencher valor_unitario ausente
+import pandas as pd
+
+Data['valor_unitario'] = Data['valor_venda'] / Data['quantidade']
+print(Data)
+
+valor_especifico = 0
+Data['valor_unitario'].fillna(valor_especifico, inplace=True)
+
+print(Data)
+
+
+#9. Recalcular valor_venda
+Data['valor_venda'] = Data['quantidade'] * Data['valor_venda']
+
+print(Data)
+
+
+#10. Salvar o novo DataFrame limpo em um novo arquivo Excel
+import pandas as pd
+data_novo = pd.DataFrame(data_novo)
+
+data_novo.to_excel('novo_vendas.xlsx', index=False)
+
+print("DataFrame salvo com sucesso em 'novo_vendas.xlsx'")
+
+
+#1. Total de vendas por loja - Agrupar por loja e somar o valor total vendido
+import pandas as pd
+
+Data = pd.DataFrame(Data)
+total_vendas_por_loja = Data.groupby('loja')['valor_venda'].sum().reset_index()
+
+
+print(total_vendas_por_loja)
+
+
+#2. Evolução mensal de vendas -  Identificar sazonalidades e picos mensais.
+import pandas as pd
+
+Data = pd.DataFrame(Data)
+total_vendas_por_mes = Data.groupby('loja')['valor_venda'].sum().reset_index()
+
+print(total_vendas_por_mes)
+
+
+data_ordenado = Data.sort_values(by='valor_venda', ascending=False)
+
+print(data_ordenado)
+
+
+#3. Agrupar por mês e somar vendas
+import pandas as pd
+
+
+Data = pd.DataFrame(Data)
+Data['data'] = pd.to_datetime(Data['data'])
+total_vendas_por_mês = Data.groupby('data')['valor_venda'].sum().reset_index()
+
+print(total_vendas_por_mês)
+
+data = Data['valor_venda'].sum()
+print(f"Total de vendas: {data}")
+
+
+#4. Produtos mais vendidos (por volume) Objetivo: saber o que mais sai no caixa.
+import pandas as pd
+
+Data = pd.DataFrame(Data)
+
+vendas_por_produto = Data.groupby('produto')['quantidade'].sum().reset_index()
+
+
+vendas_por_produto = vendas_por_produto.sort_values(by='quantidade', ascending=False)
+print(vendas_por_produto)
+
+
+#5. Comparação entre categorias. Objetivo: analisar quais categorias são mais lucrativas.
+import pandas as pd
+
+Data = pd.DataFrame(Data)
+lucro_por_categoria = Data.groupby('produto')['valor_venda'].sum().reset_index()
+
+lucro_por_categoria = lucro_por_categoria.sort_values(by='valor_venda', ascending=False)
+print(lucro_por_categoria)
+
+
+#6. Comparação entre lojas por categoria. Objetivo: avaliar se há especialização ou foco diferente entre as lojas, com base nas categorias que mais vendem.
+import pandas as pd
+
+Data = pd.DataFrame(Data)
+lucro_por_categoria = Data.groupby('categoria')['valor_venda'].sum().reset_index()
+
+lucro_por_categoria = lucro_por_categoria.sort_values(by='valor_venda', ascending=False)
+print(lucro_por_categoria)
+
+
+#7. Plotar como gráfico de barras empilhadas
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+Data = pd.read_excel(r'/content/fdrive/MyDrive/vendas.xlsx')
+display(pd.DataFrame(Data))
+fig, ax = plt.subplots(figsize=(8,5))
+plt.bar(Data['loja'], Data['valor_venda'], color = "blue", edgecolor = "black", linewidth = 1)
+plt.xticks(rotation = 45)
+plt.xlabel('Lojas')
+plt.ylabel('R$')
+plt.title('Dados Vendas')
+plt.legend()
+plt.show()
