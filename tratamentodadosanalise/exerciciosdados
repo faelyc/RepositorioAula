@@ -1,0 +1,273 @@
+from google.colab import drive
+
+
+drive.mount('/content/hdrive')
+
+
+import pandas as pd
+
+
+Data = pd.read_excel(r'/content/hdrive/MyDrive/faltas_treinamento_sujo.xlsx')
+
+
+#Exercício 1 – Higienização Básica
+#a) Verifique valores nulos e tipos incorretos.
+from google.colab import drive
+drive.mount('/content/hdrive')
+import pandas as pd
+Data = pd.read_excel(r'/content/hdrive/MyDrive/faltas_treinamento_sujo.xlsx')
+Data = pd.DataFrame(Data)
+print(Data.dtypes)
+
+Data = pd.DataFrame(Data)
+valores_nulos = Data.isnull().sum()
+
+print("Valores nulos por coluna:")
+print(valores_nulos)
+
+
+#b) Corrija a coluna de datas inválidas.
+from google.colab import drive
+drive.mount('/content/hdrive')
+import pandas as pd
+Data = pd.read_excel(r'/content/hdrive/MyDrive/faltas_treinamento_sujo.xlsx')
+Data = pd.DataFrame(Data)
+Data['Dia_da_Semana_Ultima_Falta'] = Data['Dia_da_Semana_Ultima_Falta'].str.capitalize()
+
+print(Data)
+
+
+#c) Normalize os nomes dos turnos e dias da semana.
+from google.colab import drive
+drive.mount('/content/hdrive')
+import pandas as pd
+Data = pd.read_excel(r'/content/hdrive/MyDrive/faltas_treinamento_sujo.xlsx')
+Data = pd.DataFrame(Data)
+display(pd.DataFrame(Data))
+def normalizar_nome(nome):
+    nome = nome.lower()
+    nome = nome.replace('ã', 'a').replace('ç', 'c').replace('é', 'e')
+    return nome
+
+Data['Turno'] = Data['Turno'].apply(normalizar_nome)
+Data['Dia_da_Semana_Ultima_Falta'] = Data['Dia_da_Semana_Ultima_Falta'].apply(normalizar_nome)
+
+print(Data)
+
+
+#Exercício 2 – Remoção e Substituição
+#a) Remova os registros duplicados.
+from google.colab import drive
+drive.mount('/content/hdrive')
+import pandas as pd
+Data = pd.read_excel(r'/content/hdrive/MyDrive/faltas_treinamento_sujo.xlsx')
+Data = pd.DataFrame(Data)
+df_sem_duplicatas = Data.drop_duplicates()
+print(df_sem_duplicatas)
+
+
+#b) Substitua os valores nulos da coluna Evadiu por “Desconhecido”.
+from google.colab import drive
+drive.mount('/content/hdrive')
+import pandas as pd
+Data = pd.read_excel(r'/content/hdrive/MyDrive/faltas_treinamento_sujo.xlsx')
+Data = pd.DataFrame(Data)
+Data['Evadiu'] = Data['Evadiu'].fillna('desconhecido')
+print(Data)
+
+
+#c) Substitua os valores nulos da coluna Data_Ultima_Falta pela data mais comum.
+from google.colab import drive
+drive.mount('/content/hdrive')
+import pandas as pd
+Data = pd.read_excel(r'/content/hdrive/MyDrive/faltas_treinamento_sujo.xlsx')
+Data = pd.DataFrame(Data)
+data_mais_comum = Data['Data_ultima_falta'].mode()[0]
+Data['Data_ultima_falta'].fillna(data_mais_comum, inplace=True)
+print(Data)
+
+
+#Exercício 3 – Correções e Detecção de Outliers
+from google.colab import drive
+drive.mount('/content/hdrive')
+import pandas as pd
+Data = pd.read_excel(r'/content/hdrive/MyDrive/faltas_treinamento_sujo.xlsx')
+Data = pd.DataFrame(Data)
+Data['Faltas'] = Data['Faltas'].astype(int)
+print(Data)
+Data.dtypes
+
+
+#b) Substitua outliers de faltas por np.nan e depois pela mediana.
+from google.colab import drive
+drive.mount('/content/hdrive')
+import numpy as np
+import pandas as pd
+Data = pd.read_excel(r'/content/hdrive/MyDrive/faltas_treinamento_sujo.xlsx')
+Data = pd.DataFrame(Data)
+Data['Faltas'] = Data['Faltas'].replace(0, np.nan)
+mediana = Data['Faltas'].median()
+Data['Faltas'] = Data['Faltas'].replace(0, mediana)
+
+print(Data)
+
+
+#c) Crie um flag “Faltas_Suspeitas” para valores > 10.
+from google.colab import drive
+drive.mount('/content/hdrive')
+import numpy as np
+import pandas as pd
+Data = pd.read_excel(r'/content/hdrive/MyDrive/faltas_treinamento_sujo.xlsx')
+Data = pd.DataFrame(Data)
+Data['faltas_suspeitas'] = Data['Faltas'] > 10
+
+print(Data)
+
+
+#Exercício 4 – Análise Descritiva Avançada
+#a) Qual o número total de evasões por departamento?
+from google.colab import drive
+drive.mount('/content/hdrive')
+import pandas as pd
+Data = pd.read_excel(r'/content/hdrive/MyDrive/faltas_treinamento_sujo.xlsx')
+Data = pd.DataFrame(Data)
+evasoes_por_departamento = Data.groupby('Departamento')['Faltas'].sum().reset_index()
+
+print(evasoes_por_departamento)
+
+
+#b) Qual é o percentual de evasão considerando apenas os que participaram do turno da tarde?
+from google.colab import drive
+drive.mount('/content/hdrive')
+import pandas as pd
+Data = pd.read_excel(r'/content/hdrive/MyDrive/faltas_treinamento_sujo.xlsx')
+Data = pd.DataFrame(Data)
+
+filtro_valor1 = Data.loc[Data['Turno'] == 'Tarde', 'Faltas']
+print("Número de faltas em 'Tarde' é:",filtro_valor1)
+filtro_valor2 = Data.loc[Data['Turno'] == 'TARDE', 'Faltas']
+print("Número de faltas em 'TARDE' é:",filtro_valor2)
+filtro_valor3 = Data.loc[Data['Turno'] == 'tarde', 'Faltas']
+print("Número de faltas em 'tarde' é:",filtro_valor3)
+
+#filtro_valor1
+numerador = 10
+denominador = 100
+
+resultado = numerador / denominador
+
+print("A porcentagem de faltas em 'Tarde' é:", resultado)
+#filtro_valor2
+numerador = 8
+denominador = 100
+
+resultado = numerador / denominador
+
+print("A porcentagem de faltas em 'TARDE' é:", resultado)
+#filtro_valor3
+numerador = 0
+denominador = 100
+
+resultado = numerador / denominador
+
+print("A porcentagem de faltas em 'tarde' é:", resultado)
+
+
+#c) Qual é o desvio padrão de faltas por turno?
+from google.colab import drive
+drive.mount('/content/hdrive')
+import pandas as pd
+Data = pd.read_excel(r'/content/hdrive/MyDrive/faltas_treinamento_sujo.xlsx')
+Data = pd.DataFrame(Data)
+desvio_padrao = Data.groupby('Turno')['Faltas'].std()
+
+print(desvio_padrao)
+
+
+#Exercício 5 – Análise Temporal
+#a) Em qual mês ocorreu o maior número de faltas?
+from google.colab import drive
+drive.mount('/content/hdrive')
+import pandas as pd
+Data = pd.read_excel(r'/content/hdrive/MyDrive/faltas_treinamento_sujo.xlsx')
+Data = pd.DataFrame(Data)
+maior_numero_faltas = Data.groupby('Data_Ultima_Falta')['Faltas'].sum().reset_index()
+
+print(maior_numero_faltas)
+
+
+#b) Crie uma coluna Semana_Ultima_Falta e descubra qual semana teve maior concentração de
+#ausências.
+from google.colab import drive
+drive.mount('/content/hdrive')
+import pandas as pd
+Data = pd.read_excel(r'/content/hdrive/MyDrive/faltas_treinamento_sujo.xlsx')
+Data = pd.DataFrame(Data)
+
+Data = Data.groupby('Data_Ultima_Falta')['Faltas'].sum().reset_index()
+Data['Semana_Ultima_Falta'] = "none"
+semanas_ausencias = Data.groupby('Data_Ultima_Falta')['Faltas'].sum()
+print(semanas_ausencias)
+semana_max_ausencias = semanas_ausencias.idxmax()
+max_ausencias = semanas_ausencias.max()
+
+print(f"A semana com maior concentração de ausência é: {semana_max_ausencias} com {max_ausencias} ausências.")
+
+
+#c) Faça uma análise cruzando dia da semana e quantidade de evasões.
+from google.colab import drive
+drive.mount('/content/hdrive')
+import pandas as pd
+Data = pd.read_excel(r'/content/hdrive/MyDrive/faltas_treinamento_sujo.xlsx')
+Data = pd.DataFrame(Data)
+Data = Data.groupby('Dia_da_Semana_Ultima_Falta')['Faltas'].sum().reset_index()
+
+print(Data)
+
+
+#Exercício 6 – Análise de Risco
+#a) Crie a coluna Risco_Evasao com três categorias: Alto;, ;Moderado;, ;Baixo;.
+from google.colab import drive
+drive.mount('/content/hdrive')
+import pandas as pd
+Data = pd.read_excel(r'/content/hdrive/MyDrive/faltas_treinamento_sujo.xlsx')
+Data = pd.DataFrame(Data)
+
+
+def categorizar_risco(risco):
+    if risco < 20:
+        return 'Baixo'
+    elif risco > 30:
+        return 'Moderado'
+    elif risco > 50:
+        return 'Alto'
+    else:
+        return 'Alto'
+Data['risco_evasao'] = Data['Faltas'].apply(categorizar_risco)
+
+print(Data)
+
+
+#b) Gere uma tabela com a distribuição percentual de risco por departamento.
+from google.colab import drive
+drive.mount('/content/hdrive')
+import pandas as pd
+Data = pd.read_excel(r'/content/hdrive/MyDrive/faltas_treinamento_sujo.xlsx')
+Data = pd.DataFrame(Data)
+
+Data['percentual_evasao'] = (Data['Faltas'] /  100)
+Data = Data.groupby('Departamento')['percentual_evasao'].sum().reset_index()
+
+print(Data)
+
+
+#c) Há relação entre risco alto e turno da tarde?
+from google.colab import drive
+drive.mount('/content/hdrive')
+import pandas as pd
+Data = pd.read_excel(r'/content/hdrive/MyDrive/faltas_treinamento_sujo.xlsx')
+Data = pd.DataFrame(Data)
+risco_alto_tarde = Data[(Data['risco_evasao'] == 'alto') & (Data['Turno'] == 'tarde')]
+contagem = risco_alto_tarde.shape[0]
+
+print(f"Existe risco alto no turno da tarde: {contagem}")
