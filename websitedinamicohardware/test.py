@@ -1,0 +1,26 @@
+import time
+import pandas as pd
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as ec
+from selenium.common.exceptions import TimeoutException
+
+# Inicialize o WebDriver
+driver = webdriver.Chrome()
+
+# Abra uma página da web
+driver.get("https://www.kabum.com.br/promocao/HARDWAREKABUM")
+
+# Defina o WebDriverWait
+wait = WebDriverWait(driver, 10)
+
+# Aguarde até que o elemento esteja presente e visível
+elemento = wait.until(ec.visibility_of_element_located((By.ID, "element_id")))
+
+# Interaja com o elemento
+elemento.click()
+
+# Feche o WebDriver
+driver.quit()
